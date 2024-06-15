@@ -17,6 +17,8 @@ const playButton = document.getElementById('playIcon');
 const skipButton = document.getElementById('fwIcon');
 const rewindButton = document.getElementById('bwIcon');
 
+const bars = document.querySelectorAll('.bar');
+
 for (let list in playlists) {
     let option = document.createElement('option');
     option.value = playlists[list].src;
@@ -39,7 +41,9 @@ window.onYouTubeIframeAPIReady = function() {
             origin: "https://www.youtube.com",
             mute: 1,
             index: 0,
-            startSeconds: 0
+            startSeconds: 0,
+            origin: "https://www.youtube.com",
+            wmode: 'opaque'
         },
         events: {
             'onReady': onPlayerReady,
@@ -58,7 +62,6 @@ function onPlayerReady(event) {
 
 async function onPlayerStateChange(event) {
     const musicContainer = document.querySelector('.music-container');
-    const bars = document.querySelectorAll('.bar');
     const titleElement = document.querySelector('.title');
     const artistElement = document.querySelector('.artist');
     const albumArtElement = document.querySelector('.albumart');
@@ -114,7 +117,9 @@ audio.addEventListener('input', function() {
     if (audio.value < 5) { //Bad way of doing it, but it works :) , doing audio.value < 1 doesn't work.
         player.mute();
         volumeElement.setAttribute('name', 'volume-mute');
+        bars.forEach(bar => bar.classList.remove('playing'));
     } else {
+        bars.forEach(bar => bar.classList.add('playing'));
         player.unMute();
         player.setVolume(audio.value);
 
